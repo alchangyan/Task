@@ -3,31 +3,64 @@ html, body {
 	margin: 0;
   	background-color: #F1F1F1;
 }
+body  * {
+	display: block;
+}
 .form {
 	width: 500px;
-	padding:  10px 50px 40px;
+	padding:  10px 50px 70px;
 	margin: 50px auto 0;
 	background-color: #FFF;
+	border-radius: 5px;
 }
 h1 {
 	text-align: center;
 }
 input {
-
+	width: 100%;
+    border-radius: 3px;
+    border-width: 1px;
+    border-style: solid;
+    border-color: #cecece;
+    text-indent: 6px;
+    padding: 9px 0px;
 }
 input:focus {
     outline: none;
 }
+label {
+	font-weight: 700;
+}
+.bankAccounts {
+	text-align: center;
+}
+.errorBanks {
+	text-align: center;
+}
 .btn {
 	display: inline-block;
-    /*border: 1px solid grey;*/
     padding: 7px 22px;
     border-radius: 4px;
     cursor: pointer;
+    margin: 5px auto;
+}
+.error {
+	color: #F00;
+}
+.errorInput {
+	font-size: 10px;
+    margin: 5px;
+    overflow: hidden;
+    height: 0;
+    transition: 0.4s;
+}
+.activatedError {
+	height: 13px;
 }
 .btnSubmit {
 	background-color: #F1A41A;
 	color: #FFF;
+	float: right;
 }
 .btnBank {
 	background-color: #E0E1E3;
