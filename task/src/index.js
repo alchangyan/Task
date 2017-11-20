@@ -2,27 +2,94 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 
+var mainPartArray = {
+	0:{
+		id: 'firstName', 
+		name: 'Name',
+		errorClassName: 'errorFirstName'
+	},
+	1:{
+		id: 'lastName',
+		name: 'Last name', 
+		errorClassName: 'errorLastName'
+	},
+	2:{
+		id: 'email', 
+		name: 'Email',
+		errorClassName: 'errorEmail'
+	},
+
+};
+class Part extends React.Component {
+	render() {
+	  return (
+	  	<div className="group{this.state.value}">
+		    <label htmlFor="{()=>{this.state.htmlFor}}">{this.state.value['name']}</label>
+		    <input type="text" id="{mainPartArray[this.state.value]['id']}" onKeyDown={this.state.onKeyDown}/>
+		    <span className="error errorInput errorFirstName">Name is required</span>
+	  	</div>
+	  );
+	}
+}
+
+class MainPart extends React.Component {
+	constructor() {
+		super();
+		this.state = {
+			value:''
+		}
+	}
+	onKeyDown(i){
+		console.log(i)
+	}
+	renderComponents(i){
+	    return (
+	      <Part
+	        value={mainPartArray[i]}
+	        htmlFor={mainPartArray[i]['id']}
+	        onKeyDown={() => this.onKeyDown(i)}
+	      />
+	    );
+	  }
+	render() {
+		return(
+			<div>
+				{this.renderComponents(0)}
+				{this.renderComponents(1)}
+				{this.renderComponents(2)}
+			</div>
+			)
+	}
+}
+
 class App extends React.Component {
-  // construcor() {
-  //   // super();
-  //   this.state = {
+  construcor() {
+    // super();
+    this.state = {
       
-  //   };
-  // };
+    };
+  };
+
+// string.charAt(0).toUpperCase() + string.slice(1);
 
   render() {
     return (
       <div className="form">
         <h1>Register account</h1>
-        <label htmlFor="firstName">Name</label>
+        <MainPart />
+        {/*<label htmlFor="firstName">Name</label>
         <input type="text" id="firstName"/>
         <span className="error errorInput errorFirstName">Name is required</span>
+
         <label htmlFor="lastName">Last name</label>
         <input type="text" id="lastName"/>
         <span className="error errorInput errorLastName">Name is required</span>
+
         <label htmlFor="email">Email</label>
         <input type="text" id="email"/>
-        <span className="error errorInput errorEmail">Name is required</span>
+        <span className="error errorInput errorEmail">Name is required</span>*/}
+
+
         <h2>Bank accounts</h2>
         <div className="bankAccounts">
           <span className="error errorBanks">You should provide at least bank account</span>
