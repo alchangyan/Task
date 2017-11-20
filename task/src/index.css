@@ -4,6 +4,7 @@ html, body {
   	background-color: #F1F1F1;
 }
 body  * {
+	font-family: 'Open Sans', sans-serif;
 	display: block;
 }
 .form {
@@ -46,16 +47,19 @@ label {
 }
 .error {
 	color: #F00;
+    height: 0;
+    margin: 5px;
+    overflow: hidden;
+    transition: 0.4s;
 }
 .errorInput {
 	font-size: 10px;
-    margin: 5px;
-    overflow: hidden;
-    height: 0;
-    transition: 0.4s;
 }
 .activatedError {
 	height: 13px;
+}
+.errorBanks.activatedError {
+	height: 19px;
 }
 .btnSubmit {
 	background-color: #F1A41A;
