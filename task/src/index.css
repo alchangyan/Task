@@ -1,1 +1,72 @@
+html, body {
+	padding: 0;
+	margin: 0;
+  	background-color: #F1F1F1;
+}
+body  * {
+	font-family: 'Open Sans', sans-serif;
+	display: block;
+}
+.form {
+	width: 500px;
+	padding:  10px 50px 70px;
+	margin: 50px auto 0;
+	background-color: #FFF;
+	border-radius: 5px;
+}
+h1 {
+	text-align: center;
+}
+input {
+	width: 100%;
+    border-radius: 3px;
+    border-width: 1px;
+    border-style: solid;
+    border-color: #cecece;
+    text-indent: 6px;
+    padding: 9px 0px;
+}
+input:focus {
+    outline: none;
+}
+label {
+	font-weight: 700;
+}
+.bankAccounts {
+	text-align: center;
+}
+.errorBanks {
+	text-align: center;
+}
+.btn {
+	display: inline-block;
+    padding: 7px 22px;
+    border-radius: 4px;
+    cursor: pointer;
+    margin: 5px auto;
+}
+.error {
+	color: #F00;
+    height: 0;
+    margin: 5px;
+    overflow: hidden;
+    transition: 0.4s;
+}
+.errorInput {
+	font-size: 10px;
+}
+.activatedError {
+	height: 13px;
+}
+.errorBanks.activatedError {
+	height: 19px;
+}
+.btnSubmit {
+	background-color: #F1A41A;
+	color: #FFF;
+	float: right;
+}
+.btnBank {
+	background-color: #E0E1E3;
+}
 
