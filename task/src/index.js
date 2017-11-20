@@ -21,11 +21,12 @@ var mainPartArray = {
 
 };
 class Part extends React.Component {
+
 	render() {
 	  return (
-	  	<div className="group{this.state.value}">
-		    <label htmlFor="{()=>{this.state.htmlFor}}">{this.state.value['name']}</label>
-		    <input type="text" id="{mainPartArray[this.state.value]['id']}" onKeyDown={this.state.onKeyDown}/>
+	  	<div className="group{this.props.value}">
+		    <label htmlFor="">{this.props.value['name']}</label>
+		    <input type="text" id="{this.props.value['id']}" onKeyDown={this.props.onKeyDown}/>
 		    <span className="error errorInput errorFirstName">Name is required</span>
 	  	</div>
 	  );
@@ -65,10 +66,7 @@ class MainPart extends React.Component {
 class App extends React.Component {
   construcor() {
     // super();
-    this.state = {
-      
     };
-  };
 
 // string.charAt(0).toUpperCase() + string.slice(1);
 
