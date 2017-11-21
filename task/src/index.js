@@ -2,99 +2,176 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 
-var mainPartArray = {
-	0:{
-		id: 'firstName', 
-		name: 'Name',
-		errorClassName: 'errorFirstName'
-	},
-	1:{
-		id: 'lastName',
-		name: 'Last name', 
-		errorClassName: 'errorLastName'
-	},
-	2:{
-		id: 'email', 
-		name: 'Email',
-		errorClassName: 'errorEmail'
-	},
+var errors = {};
 
-};
-class Part extends React.Component {
 
-	render() {
-	  return (
-	  	<div className="group{this.props.value}">
-		    <label htmlFor="">{this.props.value['name']}</label>
-		    <input type="text" id="{this.props.value['id']}" onKeyDown={this.props.onKeyDown}/>
-		    <span className="error errorInput errorFirstName">Name is required</span>
-	  	</div>
-	  );
-	}
-}
 
-class MainPart extends React.Component {
-	constructor() {
-		super();
-		this.state = {
-			value:''
-		}
-	}
-	onKeyDown(i){
-		console.log(i)
-	}
-	renderComponents(i){
-	    return (
-	      <Part
-	        value={mainPartArray[i]}
-	        htmlFor={mainPartArray[i]['id']}
-	        onKeyDown={() => this.onKeyDown(i)}
-	      />
-	    );
-	  }
-	render() {
-		return(
-			<div>
-				{this.renderComponents(0)}
-				{this.renderComponents(1)}
-				{this.renderComponents(2)}
-			</div>
-			)
-	}
-}
 
 class App extends React.Component {
-  construcor() {
-    // super();
-    };
+  constructor () {
+    super ();
+    this.state = {
+    	bankCount:0
+    }
+		
+  }
 
-// string.charAt(0).toUpperCase() + string.slice(1);
+  validator ( type, val ) {
+			// console.log(type)
+			// console.log(val)
+			switch(type) {
+			  case 'firstName':
+			  case 'lastName':
+			  	return /^([A-za-z]{0,})\b$/.test(val);
+
+			  case 'email':
+			  	return /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(val);
+
+			  case 'iban':
+			  	return /^[A-Z]{2}\d{2}(?:\d{4}){3}\d{4}(?:\d\d?)?$/.test(val);
+
+			  default:
+			  	return true;
+			}
+
+		}
+
+
+	handeChange ( element ) {
+		// console.log(element.value)
+		// console.log(element.className)
+		let obj = {}
+		let classString = element.className
+		let valueString = element.value
+
+		let lastLetter = classString[classString.length-1] // for checking banks
+		if (!isNaN(lastLetter)) {
+			classString = classString.slice(0, -1);
+
+			if(this.state.bankAccounts == undefined) this.state.bankAccounts = {}
+			if(this.state.bankAccounts[lastLetter] == undefined) this.state.bankAccounts[lastLetter] = {}
+			this.state.bankAccounts[lastLetter][classString] = valueString
+		} else {
+			obj[classString] = valueString
+			lastLetter = '';
+		}
+
+
+
+		let errorVal = classString+lastLetter+'Error'
+
+		if(this.validator(classString , valueString) || valueString === '') { // no errors
+
+			if ( errors[errorVal] ) { // remove error if it exist
+				this.refs[errorVal].classList.toggle('activatedError')
+				errors[errorVal] = false
+			}
+
+			this.setState(obj); // set value
+
+		} else { // has error
+
+			if ( !errors[errorVal] ) { // set error
+				this.refs[errorVal].classList.toggle('activatedError')
+				errors[errorVal] = true
+			}
+		}
+
+	}
+	letsSubmit (e) {
+		console.log( 'hello' )
+	}
+
+	addBankFields (e) {
+		this.setState({
+	    bankCount: this.state.bankCount+1
+		});
+	}
+
+	removeBankFields () {
+		this.setState({
+	    bankCount: this.state.bankCount--
+		});
+	}
+
+	createBankBlocks () {
+		let fields = []
+		for (var i = 0;  i < this.state.bankCount ; i++) {
+			let valI = "iban"+i
+			let valB = "bankName"+i
+			fields[i] = (
+				<div
+					key={i}
+					ref={"bank"+i}
+				>
+					<label htmlFor="lastName">IBAN</label>
+					<input 
+							type="text" 
+							ref={valI}
+							className={valI}
+							onChange={(e) => this.handeChange(this.refs[valI])}
+					/>
+					<span ref={valI+"Error"} className="error errorInput">Value should be a valid IBAN</span>
+
+					<label htmlFor="lastName">Bank name</label>
+					<input 
+							type="text" 
+							ref={valB}
+							className={valB}
+							onChange={(e) => this.handeChange(this.refs[valB])}
+					/>
+					<span ref={valB+"Error"} className="error errorInput">Value should be a valid Bank Name</span>
+				</div>
+			)
+		}
+		return fields;
+	}
 
   render() {
     return (
-      <div className="form">
+      <form className="form" onSubmit={this.letsSubmit}>
         <h1>Register account</h1>
-        <MainPart />
-        {/*<label htmlFor="firstName">Name</label>
-        <input type="text" id="firstName"/>
-        <span className="error errorInput errorFirstName">Name is required</span>
+        <label htmlFor="firstName">Name</label>
+        <input 
+        	type="text"
+	    		ref="firstName"
+	    		className="firstName"
+	    		id="firstName"
+	    		onChange={(e) => this.handeChange(this.refs.firstName)} 
+	    	/>
+        <span ref="firstNameError" className="error errorInput errorFirstName">Name is required</span>
 
         <label htmlFor="lastName">Last name</label>
-        <input type="text" id="lastName"/>
-        <span className="error errorInput errorLastName">Name is required</span>
+        <input 
+        	type="text" 
+        	ref="lastName" 
+        	className="lastName"
+        	id="lastName"
+        	onChange={(e) => this.handeChange(this.refs.lastName)}
+        />
+        <span ref="lastNameError" className="error errorInput errorLastName">Last name is required</span>
 
         <label htmlFor="email">Email</label>
-        <input type="text" id="email"/>
-        <span className="error errorInput errorEmail">Name is required</span>*/}
-
+        <input 
+        	type="text" 
+        	ref="email"
+        	className="email"
+        	id="email"
+        	onChange={(e) => this.handeChange(this.refs.email)} 
+    	/>
+        <span ref="emailError" className="error errorInput errorEmail">Value should be a valid email</span>
 
         <h2>Bank accounts</h2>
         <div className="bankAccounts">
-          <span className="error errorBanks">You should provide at least bank account</span>
-          <div className="btn btnBank">+ Add bank account</div>
+        	{ this.createBankBlocks() }
+          <span ref="bankError" className="error errorbanks">You should provide at least bank account</span>
+          <div 
+          	className="btn btnBank"
+          	onClick={(e) => this.addBankFields(e)}
+          >+ Add bank account</div>
         </div>
-        <div className="btn btnSubmit">Submit!</div>
-      </div>
+        <div type="submit" className="btn btnSubmit">Submit!</div>
+      </form>
     );
   }
 }
@@ -104,3 +181,4 @@ ReactDOM.render(
 	<App />,
 	document.getElementById('root')
 	);
+
