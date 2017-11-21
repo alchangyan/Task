@@ -48,9 +48,10 @@ class App extends React.Component {
 		if (!isNaN(lastLetter)) {
 			classString = classString.slice(0, -1);
 
-			if(this.state.bankAccounts == undefined) this.state.bankAccounts = {}
+			if(this.state.bankAccounts == undefined) this.state.bankAccounts = {} // it's wrong but I don't know another vays yet
 			if(this.state.bankAccounts[lastLetter] == undefined) this.state.bankAccounts[lastLetter] = {}
 			this.state.bankAccounts[lastLetter][classString] = valueString
+
 		} else {
 			obj[classString] = valueString
 			lastLetter = '';
@@ -79,18 +80,29 @@ class App extends React.Component {
 
 	}
 	letsSubmit (e) {
-		console.log( 'hello' )
+		e.preventDefault()
+		if (this.state.bankCount == 0) {
+			if ( !errors['bankCount'] ) { // set error
+				this.refs.bankCountError.classList.toggle('activatedError')
+				errors['bankCount'] = true
+			}
+		}
 	}
 
 	addBankFields (e) {
+		if ( errors['bankCount'] ) { // remove error if it exist
+				this.refs.bankCountError.classList.toggle('activatedError')
+				errors['bankCount'] = false
+		}
 		this.setState({
-	    bankCount: this.state.bankCount+1
+	    bankCount: this.state.bankCount + 1
 		});
 	}
 
-	removeBankFields () {
+	removeBankField (e) {
+		console.log( 'clicked' )
 		this.setState({
-	    bankCount: this.state.bankCount--
+	    bankCount: this.state.bankCount - 1
 		});
 	}
 
@@ -103,7 +115,9 @@ class App extends React.Component {
 				<div
 					key={i}
 					ref={"bank"+i}
+					className="bankBlock"
 				>
+					<span className="closeBankBlock" onClick={(e) => this.removeBankField(i)}>Remove</span>
 					<label htmlFor="lastName">IBAN</label>
 					<input 
 							type="text" 
@@ -129,7 +143,7 @@ class App extends React.Component {
 
   render() {
     return (
-      <form className="form" onSubmit={this.letsSubmit}>
+      <form className="form" onSubmit={this.letsSubmit.bind(this)}>
         <h1>Register account</h1>
         <label htmlFor="firstName">Name</label>
         <input 
@@ -164,13 +178,13 @@ class App extends React.Component {
         <h2>Bank accounts</h2>
         <div className="bankAccounts">
         	{ this.createBankBlocks() }
-          <span ref="bankError" className="error errorbanks">You should provide at least bank account</span>
+          <span ref="bankCountError" className="error errorBanks">You should provide at least bank account</span>
           <div 
           	className="btn btnBank"
           	onClick={(e) => this.addBankFields(e)}
           >+ Add bank account</div>
         </div>
-        <div type="submit" className="btn btnSubmit">Submit!</div>
+        <button type="submit" className="btn btnSubmit">Submit!</button>
       </form>
     );
   }

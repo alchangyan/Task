@@ -26,7 +26,7 @@ input {
     text-indent: 6px;
     padding: 9px 0px;
 }
-input:focus {
+input:focus, button {
     outline: none;
 }
 label {
@@ -65,10 +65,29 @@ label {
 	background-color: #F1A41A;
 	color: #FFF;
 	float: right;
+	border-width: 0;
 }
 .btnBank {
 	background-color: #E0E1E3;
 }
 .bankAccounts label, .bankAccounts .error  {
 	text-align: left;
+}
+.bankBlock {
+	position: relative;
+}
+.closeBankBlock {
+    position: absolute;
+    display: inline-block;
+    width: 83px;
+    height: 23px;
+    background-color: #cecece;
+    color: #FFF;
+    border-radius: 2px 2px 0 0;
+    right: 16px;
+    cursor: pointer;
+    transition: 0.4s;
+}
+.closeBankBlock:hover {
+    background-color: #ea1616;
 }
