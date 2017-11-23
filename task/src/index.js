@@ -93,20 +93,31 @@ class App extends React.Component {
 				
 			}
 		}
-		console.log(errors)
-		console.log(errors[0])
 		if (emptyErr) {
 			alert( 'You have some empty fields.' )
-		} else if ( Object.keys(error).length === 0 && error.constructor === Object ){
-			console.log('im in')
+		} else if ( Object.keys(errors).length === 0 && errors.constructor === Object ){
 			let isValid = true;
+
 			for ( let i in this.state)
+
 				if(typeof this.state[i] === 'object') {
+
+					for(let key in this.state[i]) {
+						if (!this.validator('iban', this.state[i][key]['iban'] )) isValid = false
+						if (!this.validator('bankName', this.state[i][key]['bankName'] )) isValid = false
+
+					}
 
 				} else {
 
+					if (!this.validator(i, this.state[i] )) isValid = false
+
 				}
-			if (isValid) {}
+			if (isValid) {
+				alert("Form data:\n" + JSON.stringify(this.state, null, 4))
+			} else {
+				alert( 'You have some inalid data. Please check' )
+			}
 			// validator
 		}
 	}
