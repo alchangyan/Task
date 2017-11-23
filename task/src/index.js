@@ -5,8 +5,6 @@ import './index.css';
 var errors = {};
 var bankCount = 0;
 
-
-
 class App extends React.Component {
   constructor () {
     super ();
@@ -19,7 +17,7 @@ class App extends React.Component {
 		
   }
   validator ( type, val ) {
-  		console.log('validated' + type)
+  		// console.log('validated' + type)
 			switch(type) {
 			  case 'firstName':
 			  case 'lastName':
@@ -38,17 +36,20 @@ class App extends React.Component {
 		}
 
 
-	handeChange ( element ) {
+	handleChange ( element ) {
 		let obj = {}
 		let classString = element.className
 		let valueString = element.value
 
 		let lastLetter = classString[classString.length-1] // for checking banks
+
 		if (!isNaN(lastLetter)) {
 			classString = classString.slice(0, -1);
 
-			if(this.state.bankAccounts === undefined) this.state.bankAccounts = {} // it's wrong but I don't know another vays yet
+			if(this.state.bankAccounts === undefined) this.state.bankAccounts = {} // it's wrong but I don't know another ways yet
+
 			if(this.state.bankAccounts[lastLetter] === undefined) this.state.bankAccounts[lastLetter] = {}
+
 			this.state.bankAccounts[lastLetter][classString] = valueString
 
 		} else {
@@ -56,30 +57,25 @@ class App extends React.Component {
 			lastLetter = '';
 		}
 
-
-
 		let errorVal = classString+lastLetter+'Error'
 
 		if(this.validator(classString , valueString) || valueString === '') { // no errors
-
 			if ( errors[errorVal] ) { // remove error if it exist
 				this.refs[errorVal].classList.toggle('activatedError')
 				delete errors[errorVal]
 			}
-
-
 		} else { // has error
-
 			if ( !errors[errorVal] ) { // set error
 				this.refs[errorVal].classList.toggle('activatedError')
 				errors[errorVal] = true
 			}
 		}
-
-			this.setState(obj); // set value
+		this.setState(obj); // set value
 	}
+
 	letsSubmit (e) {
 		e.preventDefault()
+
 		if (this.state.bankAccounts.length === 0) {
 			if ( !errors['bankCount'] ) { // set error
 				this.refs.bankCountError.classList.toggle('activatedError')
@@ -87,36 +83,37 @@ class App extends React.Component {
 			}
 		}
 		let emptyErr = false
+
 		for(let i in this.refs) {
 			if (this.refs[i].value !== undefined) {
 				if(this.refs[i].value === '') emptyErr = true
-				
 			}
 		}
+
 		if (emptyErr) {
 			alert( 'You have some empty fields.' )
+
 		} else if ( Object.keys(errors).length === 0 && errors.constructor === Object ){
 			let isValid = true;
 
 			for ( let i in this.state)
-
 				if(typeof this.state[i] === 'object') {
-
 					for(let key in this.state[i]) {
 						if (!this.validator('iban', this.state[i][key]['iban'] )) isValid = false
 						if (!this.validator('bankName', this.state[i][key]['bankName'] )) isValid = false
-
 					}
-
 				} else {
-
 					if (!this.validator(i, this.state[i] )) isValid = false
-
 				}
+
 			if (isValid) {
+
 				alert("Form data:\n" + JSON.stringify(this.state, null, 4))
+
 			} else {
+
 				alert( 'You have some inalid data. Please check' )
+
 			}
 			// validator
 		}
@@ -132,12 +129,13 @@ class App extends React.Component {
 		this.setState({
 	    bankAccounts:this.state.bankAccounts
 		});
+
 	}
 
 	removeBankField (i) {
-
 		this.state.bankAccounts.splice( i-1 , 1 )
 	  bankCount = bankCount - 1,
+
 		this.setState({
 	    bankAccounts: this.state.bankAccounts
 		});
@@ -145,9 +143,11 @@ class App extends React.Component {
 
 	createBankBlocks (props) {
 		let fields = []
+
 		for (var i in props	) {
 			let valI = "iban"+i
 			let valB = "bankName"+i
+
 			fields[i] = (
 				<div
 					key={i}
@@ -161,7 +161,7 @@ class App extends React.Component {
 							ref={valI}
 							className={valI}
 							value={props[i].iban}
-							onChange={(e) => this.handeChange(this.refs[valI])}
+							onChange={(e) => this.handleChange(this.refs[valI])}
 					/>
 					<span ref={valI+"Error"} className="error errorInput">Value should be a valid IBAN</span>
 
@@ -171,7 +171,7 @@ class App extends React.Component {
 							ref={valB}
 							className={valB}
 							value={props[i].bankName}
-							onChange={(e) => this.handeChange(this.refs[valB])}
+							onChange={(e) => this.handleChange(this.refs[valB])}
 					/>
 					<span ref={valB+"Error"} className="error errorInput">Value should be a valid Bank Name</span>
 				</div>
@@ -190,7 +190,7 @@ class App extends React.Component {
 	    		ref="firstName"
 	    		className="firstName"
 	    		id="firstName"
-	    		onChange={(e) => this.handeChange(this.refs.firstName)} 
+	    		onChange={(e) => this.handleChange(this.refs.firstName)} 
 	    	/>
         <span ref="firstNameError" className="error errorInput errorFirstName">Name is required</span>
 
@@ -200,7 +200,7 @@ class App extends React.Component {
         	ref="lastName" 
         	className="lastName"
         	id="lastName"
-        	onChange={(e) => this.handeChange(this.refs.lastName)}
+        	onChange={(e) => this.handleChange(this.refs.lastName)}
         />
         <span ref="lastNameError" className="error errorInput errorLastName">Last name is required</span>
 
@@ -210,7 +210,7 @@ class App extends React.Component {
         	ref="email"
         	className="email"
         	id="email"
-        	onChange={(e) => this.handeChange(this.refs.email)} 
+        	onChange={(e) => this.handleChange(this.refs.email)} 
     	/>
         <span ref="emailError" className="error errorInput errorEmail">Value should be a valid email</span>
 
