@@ -70,7 +70,7 @@ label {
 .btnBank {
 	background-color: #E0E1E3;
 }
-.bankAccounts label, .bankAccounts .error  {
+.bankAccounts label, .bankAccounts .error:not(.errorBanks)  {
 	text-align: left;
 }
 .bankBlock {
